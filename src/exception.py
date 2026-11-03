@@ -1,6 +1,5 @@
 import sys
 import logging
-import src.logger
 from src.logger import logging
 
 
@@ -48,13 +47,8 @@ class CustomException(Exception):
     def __str__(self):
         # This method is automatically called when the exception is printed
         return self.error_message
-if __name__ == "__main__":
-    try:
-        a = 1 / 0  # This will raise a ZeroDivisionError
+    
 
-    except Exception as e:
-        logging.info("Division by zero")
-        raise CustomException(e, sys)  # Raise our custom exception with details
 ''' Exception occurs
         ↓
 except Exception as e

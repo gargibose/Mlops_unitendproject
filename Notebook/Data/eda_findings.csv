@@ -1,0 +1,10 @@
+Feature/Analysis,Observation,Recommended Action
+Dataset Shape,891 rows and 12 columns,Proceed with modeling
+Missing Values,Missing values present,Apply imputation
+Cabin,Large percentage missing,Drop column
+Age,Missing values detected,Median imputation
+Embarked,Few missing values,Mode imputation
+Sex,Strong survival predictor,Retain feature
+Pclass,Strong survival predictor,Retain feature
+Fare,Contains outliers,Scale feature
+FamilySize,Useful engineered feature,Use in model training
