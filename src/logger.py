@@ -4,7 +4,7 @@ from datetime import datetime#datetime module is used to work with dates and tim
 import sys
 
 LOG_FILE = f"{datetime.now().strftime('%m_%d_%Y__%H_%M_%S')}.log" #we create a log file with the current timestamp in the filename
-log_path = os.path.join(os.getcwd(),"logs",LOG_FILE) #we create a path for the log file in the logs directory
+log_path = os.path.join(os.getcwd(),"logs") #we create a path for the log file in the logs directory
 os.makedirs(log_path,exist_ok=True) #we create the logs directory if it doesn't exist
 LOG_FILE_PATH = os.path.join(log_path,LOG_FILE) #we create the full path for the log file that includes the logs directory and the log file name
 logging.basicConfig(

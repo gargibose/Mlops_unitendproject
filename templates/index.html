@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Titanic Survival Predictor</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f6f9;
+            margin:0;
+            padding:30px;
+        }
+
+        .container{
+            max-width:800px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            text-align:center;
+            color:#2563eb;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:gray;
+            margin-bottom:30px;
+        }
+
+        .grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:15px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:5px;
+            font-weight:bold;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:8px;
+        }
+
+        button{
+            margin-top:20px;
+            width:100%;
+            background:#2563eb;
+            color:white;
+            border:none;
+            padding:12px;
+            border-radius:8px;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .result-card{
+            margin-top:25px;
+            padding:20px;
+            border-radius:10px;
+            background:#f8fafc;
+        }
+
+        .result-title{
+            font-size:22px;
+            font-weight:bold;
+            text-align:center;
+        }
+
+        progress{
+            width:100%;
+            height:20px;
+        }
+
+        .metric{
+            margin-top:15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚢 Titanic Survival Predictor</h1>
+
+    <p class="subtitle">
+        Machine Learning Prediction using FastAPI
+    </p>
+
+    <form id="predictionForm">
+
+        <div class="grid">
+
+            <div>
+                <label>Pclass</label>
+                <select id="Pclass">
+                    <option value="1">1st Class</option>
+                    <option value="2">2nd Class</option>
+                    <option value="3">3rd Class</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Sex</label>
+                <select id="Sex">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Age</label>
+                <input type="number" id="Age" value="30">
+            </div>
+
+            <div>
+                <label>Spouse</label>
+                <input type="number" id="SibSp" value="0">
+            </div>
+
+            <div>
+                <label>Parents/Children</label>
+                <input type="number" id="Parch" value="0">
+            </div>
+
+            <div>
+                <label>Fare</label>
+                <input type="number" id="Fare" value="100">
+            </div>
+
+            <div>
+                <label>Embarked</label>
+                <select id="Embarked">
+                    <option value="S">Southampton (S)</option>
+                    <option value="C">Cherbourg (C)</option>
+                    <option value="Q">Queenstown (Q)</option>
+                </select>
+            </div>
+
+        </div>
+
+        <button type="submit">
+            Predict Survival
+        </button>
+
+    </form>
+
+    <div class="result-card">
+
+        <div
+            class="result-title"
+            id="predictionResult">
+
+            Waiting for Prediction
+
+        </div>
+
+        <div class="metric">
+
+            <h3>Survival Probability</h3>
+
+            <progress
+                id="survivalBar"
+                value="0"
+                max="100">
+            </progress>
+
+            <p id="survivalText">
+                0%
+            </p>
+
+        </div>
+
+        <div class="metric">
+
+            <h3>Death Probability</h3>
+
+            <progress
+                id="deathBar"
+                value="0"
+                max="100">
+            </progress>
+
+            <p id="deathText">
+                0%
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("predictionForm")
+.addEventListener("submit",
+async function(event){
+
+event.preventDefault();
+
+const payload = {
+
+    Pclass: Number(
+        document.getElementById("Pclass").value
+    ),
+
+    Sex:
+        document.getElementById("Sex").value,
+
+    Age:
+        Number(
+            document.getElementById("Age").value
+        ),
+
+    SibSp:
+        Number(
+            document.getElementById("SibSp").value
+        ),
+
+    Parch:
+        Number(
+            document.getElementById("Parch").value
+        ),
+
+    Fare:
+        Number(
+            document.getElementById("Fare").value
+        ),
+
+    Embarked:
+        document.getElementById("Embarked").value
+};
+
+const response =
+await fetch("/predict", {
+
+    method:"POST",
+
+    headers:{
+        "Content-Type":
+        "application/json"
+    },
+
+    body:
+    JSON.stringify(payload)
+});
+
+const result =
+await response.json();
+
+document.getElementById(
+"predictionResult"
+).innerHTML =
+result.result;
+
+document.getElementById(
+"survivalBar"
+).value =
+result.survival_probability;
+
+document.getElementById(
+"deathBar"
+).value =
+result.death_probability;
+
+document.getElementById(
+"survivalText"
+).innerHTML =
+result.survival_probability + "%";
+
+document.getElementById(
+"deathText"
+).innerHTML =
+result.death_probability + "%";
+
+});
+
+</script>
+
+</body>
+</html>
