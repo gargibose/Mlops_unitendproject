@@ -5,8 +5,12 @@ from src.logger import logging
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
+from src.components.data_transformation import DataTransformation   
+from src.components.data_transformation import DataTransformationConfig
 
 from dataclasses import dataclass #this is used to create a class with attributes that can be initialized with default values   
+from src.utils import save_object #this is used to import the save_object function from the utils.py file
+print("Script Started")
 @dataclass# this decorator is used to create a class with attributes that can be initialized with default values
 class DataIngestionConfig:# this class is used to define the configuration for data ingestion where to save the data
     train_data_path: str = os.path.join('artifacts', 'train.csv')   # this is the path where the train data will be saved
@@ -36,6 +40,25 @@ class DataIngestion: # this class is used to define the data ingestion process
             return (self.ingestion_config.train_data_path, self.ingestion_config.test_data_path) # this is used to return the paths of the train and test data
         except Exception as e:
             raise CustomException(e, sys) # this is used to raise a custom exception if any error occurs during the data ingestion process
-if __name__ == "__main__": # this is used to check if the script is being run directly or imported as a module
-    obj = DataIngestion() # this is used to create an instance of the DataIngestion class
-    obj.initiate_data_ingestion() # this is used to call the initiate_data_ingestion method of the DataIngestion class          
+if __name__ == "__main__":
+
+    obj = DataIngestion()
+
+    train_data_path, test_data_path = (
+        obj.initiate_data_ingestion()
+    )
+
+    print("Train Path:", train_data_path)
+    print("Test Path:", test_data_path)
+
+    data_transformation = DataTransformation()
+
+    train_arr, test_arr, preprocessor_path = (
+        data_transformation.initiate_data_transformation(
+            train_data_path,
+            test_data_path
+        )
+    )
+
+    print("\nTransformation completed")
+    print("Preprocessor Path:", preprocessor_path)
