@@ -1,0 +1,24 @@
+artifact_path: file:C:/Users/gargi/OneDrive/AI_ML_2026/portfolio_projects/Mlops_unitendproject/mlruns/1/models/m-6f95f31a35fd41b2b3e0aa85d7abf8e8/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.14.6
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - sklearn.tree._tree.Tree
+mlflow_version: 3.17.2
+model_id: m-6f95f31a35fd41b2b3e0aa85d7abf8e8
+model_size_bytes: 4110413
+model_uuid: m-6f95f31a35fd41b2b3e0aa85d7abf8e8
+prompts: null
+run_id: 4a9e3845457d4a5b8bd4b4e43e13d40a
+utc_time_created: '2026-11-05 03:51:49.612152'

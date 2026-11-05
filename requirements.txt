@@ -1,11 +1,12 @@
-pandas
-scikit-learn
+pandas==1.5.3
+numpy==1.26.4
+scikit-learn==1.5.1
+dill==0.3.8
+fastapi==0.115.0
+uvicorn==0.30.6
+evidently==0.4.40
 joblib
 mlflow
-fastapi
-uvicorn
-evidently
 protobuf==3.20.3
-seaborn
-dill  #\ this is used to serialize and deserialize Python objects and is usefull to create a pickle file of the model
+seaborn #\ this is used to serialize and deserialize Python objects and is usefull to create a pickle file of the model
 #-e 

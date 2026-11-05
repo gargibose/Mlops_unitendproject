@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Evidently AI Dashboard</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f6f9;
+            margin:0;
+            padding:30px;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:auto;
+        }
+
+        h1{
+            text-align:center;
+            color:#2563eb;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:#666;
+            margin-bottom:40px;
+        }
+
+        .card-container{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(280px,1fr));
+
+            gap:20px;
+        }
+
+        .card{
+
+            background:white;
+
+            padding:25px;
+
+            border-radius:15px;
+
+            box-shadow:
+            0 5px 15px rgba(0,0,0,0.1);
+
+            text-align:center;
+
+        }
+
+        .card h2{
+
+            color:#1e293b;
+
+        }
+
+        .card p{
+
+            color:#666;
+
+        }
+
+        .btn{
+
+            display:inline-block;
+
+            margin-top:15px;
+
+            padding:10px 20px;
+
+            background:#2563eb;
+
+            color:white;
+
+            text-decoration:none;
+
+            border-radius:8px;
+        }
+
+        .btn:hover{
+
+            background:#1d4ed8;
+        }
+
+        .back-btn{
+
+            display:block;
+
+            margin:30px auto;
+
+            width:180px;
+
+            text-align:center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📊 Evidently AI Monitoring Dashboard</h1>
+
+    <p class="subtitle">
+
+        Model Monitoring & Data Quality Reports
+
+    </p>
+
+    <div class="card-container">
+
+        <div class="card">
+
+            <h2>Classification Report</h2>
+
+            <p>
+                Accuracy, Precision,
+                Recall, F1 Score,
+                Confusion Matrix,
+                ROC Curve
+            </p>
+
+            <a
+              href="/reports/classification"
+              target="_blank"
+              class="btn">
+
+              Open Report
+
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Data Drift Report</h2>
+
+            <p>
+                Compare train and test
+                distributions and detect
+                drift in features.
+            </p>
+
+            <a
+              href="/reports/drift"
+              target="_blank"
+              class="btn">
+
+              Open Report
+
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Data Summary Report</h2>
+
+            <p>
+                Dataset quality,
+                missing values,
+                feature distributions
+                and statistics.
+            </p>
+
+            <a
+              href="/reports/summary"
+              target="_blank"
+              class="btn">
+
+              Open Report
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <a
+      href="/"
+      class="btn back-btn">
+
+      ← Back To Predictor
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

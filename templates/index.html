@@ -90,6 +90,31 @@
             margin-top:15px;
         }
 
+        .dashboard-card{
+            max-width:800px;
+            margin:30px auto 0;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+            text-align:center;
+        }
+
+        .dashboard-btn{
+            display:inline-block;
+            background:#10b981;
+            color:white;
+            padding:12px 25px;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:bold;
+            margin-top:10px;
+        }
+
+        .dashboard-btn:hover{
+            background:#059669;
+        }
+
     </style>
 
 </head>
@@ -136,7 +161,7 @@
             </div>
 
             <div>
-                <label>Parents/Children</label>
+                <label>Parents / Children</label>
                 <input type="number" id="Parch" value="0">
             </div>
 
@@ -208,88 +233,109 @@
 
 </div>
 
+<div class="dashboard-card">
+
+    <h2>📊 MLOps Monitoring Dashboard</h2>
+
+    <p style="color:gray;">
+        Access Evidently AI monitoring reports,
+        model performance metrics and data quality analysis.
+    </p>
+
+    <a
+        href="/dashboard"
+        target="_blank"
+        class="dashboard-btn">
+
+        Open Evidently Dashboard
+
+    </a>
+
+</div>
+
 <script>
 
 document.getElementById("predictionForm")
 .addEventListener("submit",
 async function(event){
 
-event.preventDefault();
+    event.preventDefault();
 
-const payload = {
+    const payload = {
 
-    Pclass: Number(
-        document.getElementById("Pclass").value
-    ),
+        Pclass: Number(
+            document.getElementById("Pclass").value
+        ),
 
-    Sex:
+        Sex:
         document.getElementById("Sex").value,
 
-    Age:
+        Age:
         Number(
             document.getElementById("Age").value
         ),
 
-    SibSp:
+        SibSp:
         Number(
             document.getElementById("SibSp").value
         ),
 
-    Parch:
+        Parch:
         Number(
             document.getElementById("Parch").value
         ),
 
-    Fare:
+        Fare:
         Number(
             document.getElementById("Fare").value
         ),
 
-    Embarked:
+        Embarked:
         document.getElementById("Embarked").value
-};
+    };
 
-const response =
-await fetch("/predict", {
+    const response = await fetch(
+        "/predict",
+        {
+            method:"POST",
 
-    method:"POST",
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
 
-    headers:{
-        "Content-Type":
-        "application/json"
-    },
+            body:
+            JSON.stringify(payload)
+        }
+    );
 
-    body:
-    JSON.stringify(payload)
-});
+    const result =
+        await response.json();
 
-const result =
-await response.json();
+    document.getElementById(
+        "predictionResult"
+    ).innerHTML =
+        result.result;
 
-document.getElementById(
-"predictionResult"
-).innerHTML =
-result.result;
+    document.getElementById(
+        "survivalBar"
+    ).value =
+        result.survival_probability;
 
-document.getElementById(
-"survivalBar"
-).value =
-result.survival_probability;
+    document.getElementById(
+        "deathBar"
+    ).value =
+        result.death_probability;
 
-document.getElementById(
-"deathBar"
-).value =
-result.death_probability;
+    document.getElementById(
+        "survivalText"
+    ).innerHTML =
+        result.survival_probability + "%";
 
-document.getElementById(
-"survivalText"
-).innerHTML =
-result.survival_probability + "%";
-
-document.getElementById(
-"deathText"
-).innerHTML =
-result.death_probability + "%";
+    document.getElementById(
+        "deathText"
+    ).innerHTML =
+        result.death_probability + "%";
 
 });
 

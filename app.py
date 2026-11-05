@@ -110,8 +110,31 @@ def predict(data: PredictionRequest):
         return {
             "error": str(e)
         }
+#generate for monitor
+@app.get("/reports/classification")
+def classification_report():
 
+    return FileResponse(
+        "artifacts/reports/classification_report.html"
+    )
+@app.get("/reports/drift")
+def drift_report():
 
+    return FileResponse(
+        "artifacts/reports/data_drift_report.html"
+    )
+@app.get("/reports/summary")
+def summary_report():
+
+    return FileResponse(
+        "artifacts/reports/data_summary_report.html"
+    )
+@app.get("/dashboard")
+def dashboard():
+
+    return FileResponse(
+        "templates/Evidently_Dashboard.html"
+    )
 if __name__ == "__main__":
 
     uvicorn.run(

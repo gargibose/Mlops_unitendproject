@@ -1,10 +1,13 @@
-import os 
+import os
 import sys
-#models libraries from sklearn, xgboost and catboost
+
+# MLflow libraries
+import mlflow
+import mlflow.sklearn
+
+# Models libraries from sklearn
 from sklearn.linear_model import LogisticRegression
-
 from sklearn.neighbors import KNeighborsClassifier
-
 from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.ensemble import (
@@ -13,7 +16,8 @@ from sklearn.ensemble import (
     ExtraTreesClassifier,
     GradientBoostingClassifier
 )
-#importing the model evaluation metrics from sklearn
+
+# Importing model evaluation metrics from sklearn
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -22,53 +26,317 @@ from sklearn.metrics import (
     roc_auc_score
 )
 
-from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+
+from src.Monitoring.Evidently_report import EvidentlyMonitor
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object
-from src.utils import evaluate_models
+
+from src.utils import (
+    save_object,
+    evaluate_models
+)
+
+
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_path = os.path.join('artifacts', 'model.pkl') # this is the path where the trained model will be saved   
+    # this is the path where the trained model
+    # will be saved
+    trained_model_file_path = os.path.join(
+        "artifacts",
+        "model.pkl"
+    )
+
+
 class ModelTrainer:
+
     def __init__(self):
-        self.model_trainer_config = ModelTrainerConfig() # this is used to create an instance of the ModelTrainerConfig class
-    def initiate_model_trainer(self, train_array, test_array): # this method is used to initiate the model training process
+
+        # this is used to create an instance
+        # of the ModelTrainerConfig class
+        self.model_trainer_config = (
+            ModelTrainerConfig()
+        )
+
+    def initiate_model_trainer(
+        self,
+        train_array,
+        test_array
+    ):
+
         try:
-            logging.info("Splitting training and test input data") # this is used to log the information that the training and test data is being split
+
+            logging.info(
+                "Splitting training and testing data"
+            )
+
+            # this is used to split train and test
+            # arrays into input features and target variable
+
             X_train, y_train, X_test, y_test = (
-                train_array[:, :-1], # this is used to get all the columns except the last column as the input features for training
-                train_array[:, -1], # this is used to get the last column as the target variable for training
-                test_array[:, :-1], # this is used to get all the columns except the last column as the input features for testing
-                test_array[:, -1] # this is used to get the last column as the target variable for testing
+
+                train_array[:, :-1],  # training features
+                train_array[:, -1],   # training target
+
+                test_array[:, :-1],   # testing features
+                test_array[:, -1]     # testing target
             )
-            models = { # this is a dictionary that contains the models that will be trained
-                "Logistic Regression": LogisticRegression(),
-                "K-Nearest Neighbors": KNeighborsClassifier(),
-                "Decision Tree": DecisionTreeClassifier(),
-                "Random Forest": RandomForestClassifier(),
-                "AdaBoost": AdaBoostClassifier(),
-                "Extra Trees": ExtraTreesClassifier(),
-                "Gradient Boosting": GradientBoostingClassifier()
+
+            # this is a dictionary containing all
+            # machine learning models to evaluate
+
+            models = {
+
+                "Logistic Regression":
+                LogisticRegression(),
+
+                "K-Nearest Neighbors":
+                KNeighborsClassifier(),
+
+                "Decision Tree":
+                DecisionTreeClassifier(),
+
+                "Random Forest":
+                RandomForestClassifier(),
+
+                "AdaBoost":
+                AdaBoostClassifier(),
+
+                "Extra Trees":
+                ExtraTreesClassifier(),
+
+                "Gradient Boosting":
+                GradientBoostingClassifier()
+
             }
-            model_report: dict = evaluate_models(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models) # this is a dictionary that will be used to store the model evaluation metrics for each model
-            #to get the best model score from the model report, will store the best model to the based on the f1 score as this is a classification problem and f1 score is a good metric to evaluate the model performance
-            best_model_score = max(sorted(model_report.values())) # this is used to get the best model score from the model report
-            best_model_name = list(model_report.keys())[ # this is used to get the best model name from the model report
-                list(model_report.values()).index(best_model_score) # this is used to get the index of the best model score from the model report
-            ]
-            best_model = models[best_model_name] # this is used to get the best model from the models dictionary
-            if best_model_score < 0.6: # this is used to check if the best model score is less than 0.6
-                raise CustomException("No best model found") # this is used to raise a custom exception if no best model is found
-            logging.info(f"Best model found on both training and testing dataset: {best_model_name} with accuracy score: {best_model_score}") # this is used to log the information that the best model has been found
-            save_object( # this is used to save the best model to the specified path
-                file_path=self.model_trainer_config.trained_model_file_path, # this is the path where the trained model will be saved
-                obj=best_model # this is the best model that will be saved
+
+            logging.info(
+                "Model evaluation started"
             )
-            predicted = best_model.predict(X_test) # this is used to predict the target variable for the test data using the best model
-            f1_scr = f1_score(y_test, predicted) # this is used to calculate the f1 score for the test data using the best model
-            return f1_scr # this is used to return the f1 score for the test data      
+
+            # this function trains all models and
+            # returns their F1 scores
+
+            model_report = evaluate_models(
+
+                X_train=X_train,
+                y_train=y_train,
+
+                X_test=X_test,
+                y_test=y_test,
+
+                models=models
+
+            )
+
+            # this is used to get the best score
+            # among all trained models
+
+            best_model_score = max(
+                sorted(
+                    model_report.values()
+                )
+            )
+
+            # this is used to identify the
+            # best model name
+
+            best_model_name = list(
+                model_report.keys()
+            )[
+                list(
+                    model_report.values()
+                ).index(
+                    best_model_score
+                )
+            ]
+
+            # this is used to retrieve the
+            # best model object
+
+            best_model = models[
+                best_model_name
+            ]
+
+            # this is used to make sure
+            # the model performs reasonably well
+
+            if best_model_score < 0.60:
+
+                raise CustomException(
+                    "No best model found",
+                    sys
+                )
+
+            logging.info(
+                f"Best model found : "
+                f"{best_model_name}"
+            )
+
+            logging.info(
+                f"Best model F1 score : "
+                f"{best_model_score}"
+            )
+
+            # this is used to save the
+            # best model as model.pkl
+
+            save_object(
+
+                file_path=
+                self.model_trainer_config
+                .trained_model_file_path,
+
+                obj=best_model
+
+            )
+
+            # this is used to make predictions
+            # on the test dataset
+
+            predicted = best_model.predict(
+                X_test
+            )
+
+            # ==================================================
+            # Model Evaluation Metrics
+            # ==================================================
+
+            # this is used to calculate
+            # the accuracy score
+
+            accuracy = accuracy_score(
+                y_test,
+                predicted
+            )
+
+            # this is used to calculate
+            # the precision score
+
+            precision = precision_score(
+                y_test,
+                predicted
+            )
+
+            # this is used to calculate
+            # the recall score
+
+            recall = recall_score(
+                y_test,
+                predicted
+            )
+
+            # this is used to calculate
+            # the F1 score
+
+            f1_scr = f1_score(
+                y_test,
+                predicted
+            )
+
+            # ==================================================
+            # MLFLOW EXPERIMENT TRACKING
+            # ==================================================
+
+            # this is used to create an experiment
+            # inside MLflow
+
+            mlflow.set_experiment(
+                "Titanic_Survival_Prediction"
+            )
+
+            # this is used to start an MLflow run
+
+            with mlflow.start_run():
+
+                # log model information
+
+                mlflow.log_param(
+                    "best_model_name",
+                    best_model_name
+                )
+
+                # log metrics
+
+                mlflow.log_metric(
+                    "accuracy",
+                    accuracy
+                )
+
+                mlflow.log_metric(
+                    "precision",
+                    precision
+                )
+
+                mlflow.log_metric(
+                    "recall",
+                    recall
+                )
+
+                mlflow.log_metric(
+                    "f1_score",
+                    f1_scr
+                )
+
+                mlflow.log_metric(
+                    "best_model_score",
+                    best_model_score
+                )
+
+                # this is used to store
+                # the trained model inside MLflow
+
+                '''mlflow.sklearn.log_model(
+
+                    sk_model=best_model,
+
+                    name=
+                    "best_model"
+
+                )'''
+                mlflow.sklearn.log_model(
+                    sk_model=best_model,
+                    name="best_model",
+                    skops_trusted_types=[
+                         "sklearn.tree._tree.Tree"
+                    ]
+                )
+
+                logging.info(
+                    "MLflow experiment "
+                    "logged successfully"
+                )
+
+            # ==================================================
+            # EVIDENTLY REPORT GENERATION
+            # ==================================================
+
+            # this is used to generate a
+            # classification monitoring report
+
+            monitor = EvidentlyMonitor()
+
+            monitor.generate_classification_report(
+
+                y_true=y_test,
+                y_pred=predicted
+
+            )
+
+            logging.info(
+                f"Classification report "
+                f"generated for "
+                f"{best_model_name}"
+            )
+
+            # this is used to return the
+            # final F1 s
+
+            return f1_scr
+
         except Exception as e:
-            raise CustomException(e, sys) # this is used to raise a custom exception if any error occurs during the model training process  
-        
+
+            raise CustomException(
+                e,
+                sys
+            )
