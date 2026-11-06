@@ -1,325 +1,323 @@
 
-# 📊 Titanic Survival Prediction MLOps Project
 
-## Project Summary
+# Titanic Survival Prediction - End-to-End MLOps Project
 
-This project is an end-to-end Machine Learning Operations (MLOps) application built using the Titanic Survival Prediction dataset. The solution covers the complete machine learning lifecycle including data ingestion, data transformation, model training, model inference, API deployment, monitoring, and reporting.
-
-The application predicts whether a Titanic passenger would survive based on passenger information such as:
-
-* Passenger Class
-* Gender
-* Age
-* Number of Siblings/Spouses
-* Number of Parents/Children
-* Fare
-* Port of Embarkation
-
-The project is deployed using FastAPI and includes a monitoring dashboard for model evaluation and data quality analysis.
+Predicting passenger survival on the Titanic using machine learning with a complete MLOps pipeline including data validation, experiment tracking with MLflow, model monitoring using Evidently AI, and FastAPI deployment.
 
 ---
 
-# 🚀 Key Features
+# Quick Start
 
-### Machine Learning Pipeline
+## Clone Repository
 
-* Automated Data Ingestion
-* Data Cleaning and Preprocessing
-* Feature Engineering
-* Model Training
-* Model Selection
-* Model Serialization using Dill
+```bash
+git clone <repo_url>
+cd Mlops_unitendproject
+```
 
-### Prediction System
+## Create Virtual Environment
 
-* FastAPI REST API
-* Interactive Web Interface
-* Real-Time Predictions
-* Probability-Based Outputs
+```bash
+python -m venv venv
+```
 
-### Monitoring & Reporting
+## Activate Environment
 
-* Classification Performance Report
-* Data Drift Monitoring
-* Data Summary Reporting
-* MLOps Monitoring Dashboard
+```bash
+venv\Scripts\activate
+```
 
----
+## Install Dependencies
 
-# 🏗️ System Architecture
-
-                    ┌────────────────────┐
-
-                    │   Raw Titanic CSV  │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                              ▼
-
-                    ┌────────────────────┐
-
-                    │ Data Ingestion     │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                              ▼
-
-                    ┌────────────────────┐
-
-                    │ Data Transformation│
-
-                    │ Encoding           │
-
-                    │ Missing Values     │
-
-                    │ Scaling            │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                              ▼
-
-                    ┌────────────────────┐
-
-                    │ Model Training     │
-
-                    │ Multiple Models    │
-
-                    │ F1 Evaluation      │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                              ▼
-
-                    ┌────────────────────┐
-
-                    │ Best Model Saved   │
-
-                    │ model.pkl          │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                              ▼
-
-                    ┌────────────────────┐
-
-                    │ Predict Pipeline   │
-
-                    └─────────┬──────────┘
-
-                              │
-
-                   ┌──────────┴──────────┐
-
-                   ▼                     ▼
-
-          ┌────────────────┐   ┌─────────────────┐
-
-          │ FastAPI API    │   │ Monitoring      │
-
-          │ Prediction UI  │   │ Dashboard       │
-
-          └────────────────┘   └─────────────────┘
-
-                                        │
-
-                                        ▼
-
-                       ┌────────────────────────────┐
-
-                       │ Classification Report      │
-
-                       │ Data Summary Report        │
-
-                       │ Data Drift Report          │
-
-                       └────────────────────────────┘
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-# 📁 Project Structure
+# Run Complete Training Pipeline
 
-Titanic_MLOps_Project
+```bash
+python src/pipeline/train_pipeline.py
+```
 
-│
+This will:
 
-├── artifacts
-
-│   ├── model.pkl
-
-│   ├── preprocessor.pkl
-
-│   ├── train.csv
-
-│   ├── test.csv
-
-│   └── reports
-
-│       ├── classification_report.html
-
-│       ├── data_summary_report.html
-
-│       └── data_drift_report.html
-
-│
-
-├── notebooks
-
-│
-
-├── src
-
-│   │
-
-│   ├── components
-
-│   │   ├── data_ingestion.py
-
-│   │   ├── data_transformation.py
-
-│   │   └── model_trainer.py
-
-│   │
-
-│   ├── pipeline
-
-│   │   └── predict_pipeline.py
-
-│   │
-
-│   ├── Monitoring
-
-│   │   ├── Evidently_report.py
-
-│   │   └── Run_evidently.py
-
-│   │
-
-│   ├── logger.py
-
-│   ├── exception.py
-
-│   └── utils.py
-
-│
-
-├── templates
-
-│   ├── index.html
-
-│   └── Evidently_Dashboard.html
-
-│
-
-├── app.py
-
-├── requirements.txt
-
-└── README.md
+- Ingest Data
+- Validate Dataset Schema
+- Transform Features
+- Train Multiple Models
+- Compare Model Performance
+- Select the Best Model
+- Save Model Artifacts
+- Log Experiments to MLflow
+- Generate Evidently Reports
 
 ---
 
-# 🤖 Models Evaluated
+# Launch MLflow Dashboard
 
-The following machine learning models were evaluated:
+```bash
+mlflow ui
+```
 
-* Logistic Regression
-* K-Nearest Neighbors
-* Decision Tree
-* Random Forest
-* AdaBoost
-* Extra Trees Classifier
-* Gradient Boosting Classifier
+Open:
 
-The best-performing model is automatically selected based on F1 Score.
+```text
+http://127.0.0.1:5000
+```
 
----
+Use MLflow to:
 
-# 📈 Monitoring Dashboard
-
-The project includes an MLOps monitoring system that generates:
-
-### Classification Report
-
-Tracks:
-
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-
-### Data Summary Report
-
-Provides:
-
-* Dataset Statistics
-* Missing Value Analysis
-* Feature Distribution Analysis
-
-### Data Drift Report
-
-Compares:
-
-* Training Dataset
-* Testing Dataset
-
-To identify:
-
-* Distribution Changes
-* Feature Drift
-* Data Quality Issues
+- Compare model runs
+- View training metrics
+- Track parameters
+- Review saved artifacts
+- Analyze experiment history
 
 ---
 
-# 🛠️ Technology Stack
+# Run Monitoring
 
-### Backend
+The Evidently monitoring module is maintained as a separate component to support future scalability and better project architecture.
 
-* Python
-* FastAPI
-* Uvicorn
+```bash
+python -m src.Monitoring.Run_evidently
+```
 
-### Machine Learning
+Generated reports are saved in:
 
-* Scikit-Learn
-* Pandas
-* NumPy
+```text
+artifacts/reports/
+```
 
-### Monitoring
+Available Reports:
 
-* Evidently AI
-
-### Frontend
-
-* HTML
-* CSS
-* JavaScript
-
-### Model Serialization
-
-* Dill
+- Classification Performance Report
+- Data Drift Report
+- Data Summary Report
 
 ---
 
-# 🎯 Business Value
+# Run FastAPI Application
 
-This project demonstrates:
+```bash
+uvicorn app:app --reload
+```
 
-* End-to-End Machine Learning Pipeline Development
-* MLOps Best Practices
-* API Deployment
-* Model Monitoring
-* Data Drift Detection
-* Real-Time Prediction Systems
-* Production-Oriented Project Structure
+Open:
 
-This solution showcases practical ML engineering skills required for Data Scientist, Machine Learning Engineer, and MLOps Engineer roles.
+```text
+http://127.0.0.1:8000
+```
+
+Use the application to:
+
+- Submit passenger details
+- Generate survival predictions
+- View prediction interface
+
+---
+
+# API Documentation
+
+Open Swagger UI:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Use Swagger to:
+
+- Test prediction endpoints
+- Review API schema
+- Validate request and response formats
+
+---
+
+# MLOps Monitoring Dashboard
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+Use the dashboard to:
+
+- View prediction metrics
+- Access generated reports
+- Review model performance summaries
+
+---
+
+# Project Structure
+
+## artifacts/
+
+Stores all generated project artifacts and outputs.
+
+### reports/
+
+- classification_report.html → Classification performance report
+- data_drift_report.html → Data drift monitoring report
+- data_summary_report.html → Dataset summary report
+
+### Files
+
+- data.csv → Raw dataset copy
+- train.csv → Training dataset
+- test.csv → Testing dataset
+- preprocessor.pkl → Saved preprocessing pipeline
+- model.pkl → Best performing trained model
+- validation_status.txt → Dataset validation results
+
+---
+
+## logs/
+
+Stores pipeline execution logs and debugging information.
+
+---
+
+## mlruns/
+
+Stores MLflow experiment runs, metrics, parameters, and artifacts.
+
+---
+
+## Notebook/
+
+Contains exploratory analysis, preprocessing experiments, and model development notebooks.
+
+### Data/
+
+- titanic.csv → Original Titanic dataset
+- titanic_cleaned.csv → Cleaned version used during EDA
+- titanic_model_ready.csv → Modeling-ready dataset
+- eda_findings.csv → Summary of insights discovered during EDA
+
+### Notebooks
+
+- Titanic_database_EDA.ipynb → Exploratory Data Analysis
+- Data_preprocessed.ipynb → Data cleaning and feature engineering
+- Model Training.ipynb → Model experimentation and evaluation
+- Reference_guide.ipynb → Project notes and references
+- Untitled.ipynb → Temporary development notebook
+
+---
+
+## src/components/
+
+Core machine learning pipeline components.
+
+- data_ingestion.py → Loads and splits the dataset
+- data_validation.py → Validates required schema and columns
+- data_transformation.py → Applies preprocessing and feature engineering
+- model_trainer.py → Trains models and selects the best performer
+
+---
+
+## src/pipeline/
+
+Orchestrates end-to-end workflows.
+
+- train_pipeline.py → Runs the complete training pipeline
+- predict_pipeline.py → Handles prediction workflow
+
+---
+
+## src/Monitoring/
+
+Monitoring and model evaluation modules.
+
+- Evidently_report.py → Generates Evidently reports
+- Run_evidently.py → Executes monitoring workflow
+
+---
+
+## Utility Modules
+
+- logger.py → Centralized logging configuration
+- exception.py → Custom exception handling
+- utils.py → Shared helper functions and model utilities
+
+---
+
+# Pipeline Workflow
+
+```text
+Titanic Dataset
+       │
+       ▼
+Data Ingestion
+       │
+       ▼
+Data Validation
+       │
+       ▼
+Data Transformation
+       │
+       ▼
+Model Training
+       │
+       ▼
+Model Comparison
+       │
+       ▼
+MLflow Tracking
+       │
+       ▼
+Model Saving
+       │
+       ▼
+Evidently Monitoring
+       │
+       ▼
+FastAPI Deployment
+```
+
+---
+
+# Models Evaluated
+
+- Logistic Regression
+- K-Nearest Neighbors
+- Decision Tree
+- Random Forest
+- AdaBoost
+- Extra Trees
+- Gradient Boosting
+
+The best model is automatically selected using the F1 Score.
+
+---
+
+# Tech Stack
+
+- Python
+- Pandas
+- NumPy
+- Scikit-Learn
+- MLflow
+- Evidently AI
+- FastAPI
+- Uvicorn
+- Dill
+
+---
+
+# Future Improvements
+
+- Docker Containerization
+- AWS Deployment
+- CI/CD Pipeline
+- MLflow Model Registry
+- Automated Retraining Pipeline
+- Cloud Monitoring Integration
+
+---
+
+# Author
+
+**Gargi Mitra**

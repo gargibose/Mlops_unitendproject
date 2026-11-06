@@ -3,15 +3,8 @@ import sys
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
-from src.components.data_transformation import DataTransformation   
-from src.components.data_transformation import DataTransformationConfig
-from src.components.model_trainer import ModelTrainerConfig
-from src.components.model_trainer import ModelTrainer
-
 from dataclasses import dataclass #this is used to create a class with attributes that can be initialized with default values   
-from src.utils import save_object #this is used to import the save_object function from the utils.py file
 print("Script Started")
 @dataclass# this decorator is used to create a class with attributes that can be initialized with default values
 class DataIngestionConfig:# this class is used to define the configuration for data ingestion where to save the data
@@ -42,37 +35,3 @@ class DataIngestion: # this class is used to define the data ingestion process
             return (self.ingestion_config.train_data_path, self.ingestion_config.test_data_path) # this is used to return the paths of the train and test data
         except Exception as e:
             raise CustomException(e, sys) # this is used to raise a custom exception if any error occurs during the data ingestion process
-'''if __name__ == "__main__":
-
-    obj = DataIngestion()
-
-    train_data_path, test_data_path = (
-        obj.initiate_data_ingestion()
-    )
-
-    print("Train Path:", train_data_path)
-    print("Test Path:", test_data_path)
-
-    data_transformation = DataTransformation()
-
-    train_arr, test_arr, preprocessor_path = (
-        data_transformation.initiate_data_transformation(
-            train_data_path,
-            test_data_path
-        )
-    )
-
-    print("\nTransformation completed")
-    print("Preprocessor Path:", preprocessor_path) #this is used to print the path of the preprocessor object and test if 
-    the data transformation process is working fine and pickle file of the preprocessor object is created successfully'''
-if __name__ == "__main__":
-    obj = DataIngestion()
-    train_data, test_data = obj.initiate_data_ingestion()
-    print("Train Path:", train_data)
-    print("Test Path:", test_data)
-
-    data_transformation = DataTransformation()
-    train_arr, test_arr,_ = data_transformation.initiate_data_transformation(train_data, test_data)
-
-    model_trainer = ModelTrainer()
-    print(model_trainer.initiate_model_trainer(train_arr, test_arr))

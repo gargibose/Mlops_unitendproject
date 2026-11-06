@@ -172,11 +172,16 @@ class ModelTrainer:
                 f"Best model found : "
                 f"{best_model_name}"
             )
-
+            print("\n🏆 BEST MODEL")
+            print("=" * 50)
+            print(f"Model Name : {best_model_name}")
+            print(f"F1 Score   : {best_model_score:.4f}")
+            print("=" * 50)
             logging.info(
                 f"Best model F1 score : "
                 f"{best_model_score}"
             )
+
 
             # this is used to save the
             # best model as model.pkl
@@ -233,7 +238,13 @@ class ModelTrainer:
                 y_test,
                 predicted
             )
-
+            print("\n📈 FINAL METRICS")
+            print("=" * 50)
+            print(f"Accuracy  : {accuracy:.4f}")
+            print(f"Precision : {precision:.4f}")
+            print(f"Recall    : {recall:.4f}")
+            print(f"F1 Score  : {f1_scr:.4f}")
+            print("=" * 50)
             # ==================================================
             # MLFLOW EXPERIMENT TRACKING
             # ==================================================

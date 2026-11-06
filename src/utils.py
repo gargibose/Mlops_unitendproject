@@ -20,18 +20,44 @@ def save_object(file_path, obj):
     except Exception as e:
         raise CustomException(e, sys)
 def evaluate_models(X_train, y_train, X_test, y_test, models):
-    '''This function is responsible for evaluating the models and returning the model report'''
+
     try:
+
         report = {}
-        for i in range(len(models)):
-            model = list(models.values())[i]
-            model.fit(X_train, y_train) # this is used to fit the model on the training data
-            y_test_pred = model.predict(X_test) # this is used to predict the target variable on the test data
-            test_model_score = f1_score(y_test, y_test_pred) # this is used to calculate the f1 score of the model on the test data
-            report[list(models.keys())[i]] = test_model_score # this is used to store the f1 score of the model in the report dictionary
+
+        print("\n📊 MODEL COMPARISON")
+        print("=" * 60)
+
+        for model_name, model in models.items():
+
+            model.fit(X_train, y_train)
+
+            y_test_pred = model.predict(X_test)
+
+            test_model_score = f1_score(
+                y_test,
+                y_test_pred
+            )
+
+            print(
+                f"{model_name:<25} "
+                f"F1 Score: {test_model_score:.4f}"
+            )
+
+            report[model_name] = (
+                test_model_score
+            )
+
+        print("=" * 60)
+
         return report
+
     except Exception as e:
-        raise CustomException(e, sys)
+
+        raise CustomException(
+            e,
+            sys
+        )
 
 def load_object(file_path):
     '''This function is responsible for loading the object from the specified file path'''
